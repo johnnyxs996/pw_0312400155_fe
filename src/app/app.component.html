@@ -1,0 +1,11 @@
+@if (globalSpinnerService.spinning()) {
+  <mat-spinner></mat-spinner>
+}
+
+@if (sidenavService.showSidenav()) {
+  <app-sidenav-layout>
+    <router-outlet></router-outlet>
+  </app-sidenav-layout>
+} @else {
+  <router-outlet></router-outlet>
+}

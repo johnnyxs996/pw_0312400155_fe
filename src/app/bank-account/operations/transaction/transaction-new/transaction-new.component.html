@@ -1,0 +1,50 @@
+<app-page-header title="Nuova operazione" [showBackButton]="true"></app-page-header>
+
+<div class="flex flex-col flex-1 justify-between items-center h-full max-w-[500px]">
+  <form [formGroup]="transactionForm">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Descrizione</mat-label>
+      <input matInput formControlName="description" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Importo</mat-label>
+      <input matInput formControlName="amount" type="number" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tassazione (%)</mat-label>
+      <input matInput formControlName="fee" type="number">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tipologia</mat-label>
+      <mat-select formControlName="type" required>
+        @for (transactionType of transactionTypes(); track transactionType) {
+          <mat-option [value]="transactionType">{{ transactionType | transactionTypeName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (executingTransferTransaction()) {
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Beneficiario</mat-label>
+        <mat-select formControlName="destinationAccountId" required>
+          @for (destinationBankAccount of destinationBankAccounts(); track destinationBankAccount.id) {
+            <mat-option [value]="destinationBankAccount.id">
+              {{ destinationBankAccount.ibanCode }} - {{ destinationBankAccount.bankId | bankName | async }}
+              {{ destinationBankAccount.userProfileId }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (destinationUserProfile(); as destinationUser) {
+          <mat-hint align="start">Nome: {{ destinationUser.name }} {{ destinationUser.surname }} - CF: {{ destinationUser.taxIdentificationNumber }}</mat-hint>
+        }
+      </mat-form-field>
+    }
+  </form>
+
+  <button mat-flat-button color="primary" class="w-full" (click)="createTransaction()">
+    Inserisci operazione
+  </button>
+</div>

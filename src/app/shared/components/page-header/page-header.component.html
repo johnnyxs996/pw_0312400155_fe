@@ -1,0 +1,10 @@
+<h2 class="flex items-center">
+  @if (showBackButton()) {
+    <button
+      mat-icon-button
+      (click)="location.back()">
+      <mat-icon aria-hidden="false" aria-label="Naviga alla pagina precedente" fontIcon="arrow_back_ios"></mat-icon>
+    </button>
+  }
+  {{ title() }}
+</h2>

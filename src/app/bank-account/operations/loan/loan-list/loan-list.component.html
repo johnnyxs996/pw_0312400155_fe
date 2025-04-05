@@ -1,0 +1,55 @@
+<div class="flex flex-row flex-1 justify-between items-center">
+  <h2>Prestiti</h2>
+  <button mat-mini-fab [routerLink]="['new']">
+    <mat-icon aria-hidden="false" aria-label="Nuovo prestito" fontIcon="add"></mat-icon>
+  </button>
+</div>
+
+@if (loans()!.length) {
+  <div>
+    <mat-table [dataSource]="loans()!">
+      <ng-container matColumnDef="amount">
+        <mat-header-cell *matHeaderCellDef> Capitale richiesto </mat-header-cell>
+        <mat-cell *matCellDef="let loan"> {{ loan.amount }} {{ currencyService.defaultAccountCurrency }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="startDate">
+        <mat-header-cell *matHeaderCellDef> Data sottoscrizione </mat-header-cell>
+        <mat-cell *matCellDef="let loan"> {{ loan.startDate | date }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="endDate">
+        <mat-header-cell *matHeaderCellDef> Data termine </mat-header-cell>
+        <mat-cell *matCellDef="let loan"> {{ loan.endDate | date }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef> Stato </mat-header-cell>
+        <mat-cell *matCellDef="let loan"> {{ loan.status! | loanStatusName }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="loanProductId">
+        <mat-header-cell *matHeaderCellDef> Tipologia </mat-header-cell>
+        <mat-cell *matCellDef="let loan"> {{ loan.loanProductId }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Azioni </mat-header-cell>
+        <mat-cell *matCellDef="let loan">
+          <button mat-button [routerLink]="[loan.id]">
+            Dettaglio
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+    </mat-table>
+  </div>
+} @else {
+  <div class="flex flex-col flex-1 justify-between items-center">
+    <h3>Non ci sono prestiti</h3>
+    <img class="illustration" src="assets/illustrations/empty-data.svg"/>
+    <h3>Per cominciare, sottoscrivine uno</h3>
+  </div>
+}

@@ -1,0 +1,32 @@
+<div class="flex flex-row w-full gap-8 overflow-x-auto pb-1" xmlns="http://www.w3.org/1999/html">
+  <mat-card class="material-card">
+    <div class="flex flex-row justify-between items-center w-full">
+      <h3>{{ balanceVisible() ? 'Saldo' : 'Saldo nascosto' }}</h3>
+      <button mat-icon-button [attr.aria-label]="balanceVisible() ? 'Nascondi bilancio' : 'Mostra bilancio'" (click)="toggleBalanceVisibility()">
+        <mat-icon [fontIcon]="balanceVisible() ? 'visibility_off' : 'visibility'"></mat-icon>
+      </button>
+    </div>
+
+    @if (balanceVisible()) {
+      <div class="flex flex-row justify-between items-center w-full">
+        <p><strong>{{ bankAccount().balance }} {{ bankAccount().currency }}</strong></p>
+      </div>
+    }
+  </mat-card>
+
+  <mat-card class="material-card">
+    <div class="flex flex-row justify-between items-center w-full">
+      <p><strong>Numero conto:</strong> {{ bankAccount().accountNumber }}</p>
+      <button mat-icon-button aria-label="Copia numero conto" (click)="copyAccountNumberToClipboard()">
+        <mat-icon fontIcon="content_copy"></mat-icon>
+      </button>
+    </div>
+
+    <div class="flex flex-row justify-between items-center w-full">
+      <p><strong>Codice IBAN:</strong> {{ bankAccount().ibanCode }}</p>
+      <button mat-icon-button aria-label="Copia codice IBAN" (click)="copyIbanCodeToClipboard()">
+        <mat-icon fontIcon="content_copy"></mat-icon>
+      </button>
+    </div>
+  </mat-card>
+</div>

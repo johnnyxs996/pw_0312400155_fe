@@ -1,0 +1,11 @@
+<app-page-header title="Dettaglio prestito" [showBackButton]="true"></app-page-header>
+
+<mat-card class="material-card">
+  <mat-card-title>Dettagli prestito</mat-card-title>
+
+  <p><b>Tipologia:</b> {{ loan()!.loanProductId }}</p>
+  <p><b>Stato:</b> {{ loan()!.status! | loanStatusName }}</p>
+  <p><b>Data inizio:</b> {{ loan()!.startDate | date }}</p>
+  <p><b>Data fine:</b> {{ loan()!.endDate | date }}</p>
+  <p><b>Ammontare:</b> {{ loan()!.amount }} {{ currencyService.defaultAccountCurrency }}</p>
+</mat-card>

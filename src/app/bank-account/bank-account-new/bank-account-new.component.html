@@ -1,0 +1,27 @@
+<app-page-header title="Nuovo conto" [showBackButton]="true"></app-page-header>
+
+<div class="flex flex-col flex-1 justify-between items-center h-full max-w-[500px]">
+  <form [formGroup]="userBankAccountForm">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Banca di riferimento</mat-label>
+      <mat-select formControlName="bankId" required>
+        @for (bank of banksList(); track bank.id) {
+          <mat-option [value]="bank.id">{{ bank.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Valuta</mat-label>
+      <mat-select formControlName="currency" required>
+        @for (currency of currencies; track currency.id) {
+          <mat-option [value]="currency.id">{{ currency.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+
+  <button mat-flat-button color="primary" class="w-full" (click)="createBankAccount()">
+    Crea conto
+  </button>
+</div>

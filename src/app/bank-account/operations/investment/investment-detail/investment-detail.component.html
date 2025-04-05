@@ -1,0 +1,11 @@
+<app-page-header title="Dettaglio investimento" [showBackButton]="true"></app-page-header>
+
+<mat-card class="material-card">
+  <mat-card-title>Dettagli investimento</mat-card-title>
+
+  <p><b>Tipologia:</b> {{ investment()!.investmentProductId }}</p>
+  <p><b>Stato:</b> {{ investment()!.status! | investmentStatusName }}</p>
+  <p><b>Data inizio:</b> {{ investment()!.startDate | date }}</p>
+  <p><b>Data fine:</b> {{ investment()!.endDate | date }}</p>
+  <p><b>Ammontare:</b> {{ investment()!.amount }} {{ currencyService.defaultAccountCurrency }}</p>
+</mat-card>

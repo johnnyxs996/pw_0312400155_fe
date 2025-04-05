@@ -1,0 +1,132 @@
+/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:root {
+  --mat-sys-primary: #861f41;
+  --mat-sys-background: #ffffff;
+  --mat-sys-surface: #f5f7f7;
+  --mat-sys-surface-container-low: #f5f7f7;
+  --mat-table-background-color: transparent;
+}
+
+.illustration {
+  max-width: 300px;
+}
+
+.snackbar-error {
+  background: #eb5278;
+}
+
+a {
+  color: var(--mat-sys-primary);
+}
+
+.material-card {
+  min-width: 200px;
+  max-width: 500px;
+  padding: 1rem;
+  height: fit-content;
+
+  mat-card-title {
+    margin-bottom: 2rem;
+  }
+}
+
+.max-w-full {
+  max-width: 100%;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+.justify-start {
+  justify-content: start;
+}
+
+.justify-end {
+  justify-content: end;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-end {
+  align-items: end;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+.pb-1 {
+  padding-bottom: 1rem;
+}
+
+.sidenav-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: calc(100% - 96px);
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+mat-table {
+  width: 100%;
+}

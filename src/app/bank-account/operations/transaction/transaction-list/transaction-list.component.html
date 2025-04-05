@@ -1,0 +1,50 @@
+<div class="flex flex-row flex-1 justify-between items-center">
+  <h2>Operazioni</h2>
+  <button mat-mini-fab [routerLink]="['new']">
+    <mat-icon aria-hidden="false" aria-label="Nuova operazione" fontIcon="add"></mat-icon>
+  </button>
+</div>
+
+@if (transactions()!.length) {
+  <div>
+    <mat-table [dataSource]="transactions()!">
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef> Descrizione </mat-header-cell>
+        <mat-cell *matCellDef="let transaction"> {{ transaction.description }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="amount">
+        <mat-header-cell *matHeaderCellDef> Ammontare </mat-header-cell>
+        <mat-cell *matCellDef="let transaction"> {{ transaction.sourceAccountId === bankAccountId() ? '-' : '+' }}{{ transaction.amount }} {{ currencyService.defaultAccountCurrency }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
+        <mat-cell *matCellDef="let transaction"> {{ transaction.createdAt | date }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef> Tipologia </mat-header-cell>
+        <mat-cell *matCellDef="let transaction"> {{ transaction.type | transactionTypeName }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef> Azioni </mat-header-cell>
+        <mat-cell *matCellDef="let transaction">
+          <button mat-button [routerLink]="[transaction.id]">
+            Dettaglio
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
+    </mat-table>
+  </div>
+} @else {
+  <div class="flex flex-col flex-1 justify-between items-center">
+    <h3>Non ci sono operazioni</h3>
+    <img class="illustration" src="assets/illustrations/empty-data.svg"/>
+    <h3>Per cominciare, inseriscine una</h3>
+  </div>
+}

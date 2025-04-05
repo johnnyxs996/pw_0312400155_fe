@@ -1,0 +1,45 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+               [attr.role]="(sidenavService.isHandset()) ? 'dialog' : 'navigation'"
+               [mode]="(sidenavService.isHandset()) ? 'over' : 'side'"
+               [opened]="(sidenavService.isHandset()) === false"
+  >
+    @if (!(sidenavService.isHandset())) {
+      <mat-toolbar>
+        <h1>{{ title() }}</h1>
+      </mat-toolbar>
+    }
+    <mat-nav-list>
+      @for (_route of sidenavService.navlistConfig(); track _route.routeLabel) {
+        <a mat-list-item [ngClass]="{ 'active': currentRoutePath()?.includes(_route.routePath) }" [routerLink]="[_route.routePath]">
+          @if (_route.iconName; as iconName) {
+            <mat-icon [fontIcon]="iconName"></mat-icon>
+          }
+          {{ _route.routeLabel }}
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar>
+      @if (sidenavService.isHandset()) {
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle()">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+      }
+      <div class="flex flex-row flex-1 justify-between items-center">
+        @if (sidenavService.isHandset()) {
+          <h1><strong>{{ title() }}</strong></h1>
+        }
+        <app-user-profile class="flex flex-1 justify-end"></app-user-profile>
+      </div>
+    </mat-toolbar>
+    <main class="sidenav-content">
+      <ng-content></ng-content>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

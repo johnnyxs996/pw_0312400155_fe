@@ -1,0 +1,25 @@
+<mat-card class="material-card max-w-full">
+  @if (cardTitle()) {
+    <mat-card-title>{{ cardTitle() }}</mat-card-title>
+  }
+  @if (cardSubtitle()) {
+    <mat-card-subtitle>{{ cardSubtitle() }}</mat-card-subtitle>
+  }
+
+  @for (row of cardRows(); track $index) {
+    <div class="flex flex-row w-full">
+      @for (col of row; track $index) {
+        <div class="flex flex-col flex-1">
+          <div class="flex flex-row justify-between">
+            <div class="flex flex-col w-full justify-start-start">
+              <p><strong>{{ col.title }}</strong></p>
+            </div>
+            <div class="flex flex-col w-full items-end">
+              <p>{{ col.description }}</p>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</mat-card>

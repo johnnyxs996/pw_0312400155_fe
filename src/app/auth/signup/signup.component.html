@@ -1,0 +1,64 @@
+<app-page-header title="Benvenuto"></app-page-header>
+
+<div class="flex flex-col items-center gap-4 w-full">
+  <form [formGroup]="signupForm" class="w-full">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Cognome</mat-label>
+      <input matInput formControlName="surname" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" required>
+      <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Codice Fiscale</mat-label>
+      <input matInput formControlName="taxIdentificationNumber" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Data di nascita</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="birthDate">
+      <mat-hint>DD/MM/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Paese di nascita</mat-label>
+      <input matInput formControlName="birthCountry" placeholder="ITA">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Comune di nascita</mat-label>
+      <input matInput formControlName="birthState" placeholder="RM">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Provincia di nascita</mat-label>
+      <input matInput formControlName="birthState" placeholder="Roma">
+    </mat-form-field>
+  </form>
+</div>
+
+<div class="flex flex-col items-center gap-4 w-full">
+  <p class="text-center">Hai già un account? <a [routerLink]="['/auth', 'login']">Accedi</a></p>
+
+  <button mat-flat-button color="primary" class="w-full" (click)="signup()">
+    Crea account
+  </button>
+</div>

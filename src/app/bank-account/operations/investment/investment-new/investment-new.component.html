@@ -1,0 +1,31 @@
+<app-page-header title="Nuovo investimento" [showBackButton]="true"></app-page-header>
+
+<div class="flex flex-col flex-1 justify-between items-center h-full max-w-[500px]">
+  <form [formGroup]="investmentForm">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Prodotto</mat-label>
+      <mat-select formControlName="investmentProductId" required>
+        @for (investmentProduct of investmentProducts(); track investmentProduct.id) {
+          <mat-option [value]="investmentProduct.id">{{ investmentProduct.name }} ({{ investmentProduct.type | investmentProductTypeName }})</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Importo</mat-label>
+      <input matInput formControlName="amount" type="number" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Termine investimento</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="endDate">
+      <mat-hint>DD/MM/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </form>
+
+    <button mat-flat-button color="primary" class="w-full" (click)="createInvestment()">
+      Avvia
+    </button>
+</div>
