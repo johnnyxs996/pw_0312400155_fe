@@ -1,5 +1,4 @@
-import { AsyncPipe, DatePipe } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, Signal, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 
@@ -14,18 +13,15 @@ import { TransactionTypeNamePipe } from '../transaction-type-name.pipe';
 import { CurrencyService } from '../../../../shared/services/currency.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { BankNamePipe } from '../../../../management/bank/bank-name.pipe';
+import {
+  CardConfig,
+  DetailCardComponent,
+  PipeName
+} from '../../../../shared/components/detail-card/detail-card.component';
 
 @Component({
   selector: 'app-transaction-detail',
-  imports: [
-    MatCardModule,
-    MatDividerModule,
-    PageHeaderComponent,
-    TransactionTypeNamePipe,
-    DatePipe,
-    BankNamePipe,
-    AsyncPipe
-  ],
+  imports: [MatCardModule, MatDividerModule, PageHeaderComponent, DetailCardComponent],
   templateUrl: './transaction-detail.component.html',
   styleUrl: './transaction-detail.component.css'
 })
@@ -66,4 +62,98 @@ export class TransactionDetailComponent implements OnInit {
         .subscribe();
     }
   }
+
+  baseTransactionDetail: Signal<CardConfig> = computed(() => ({
+    rows: [
+      [
+        {
+          title: 'Tipologia',
+          description: new TransactionTypeNamePipe().transform(this.transaction()!.type)
+        },
+        {
+          title: 'Causale',
+          description: this.transaction()!.description
+        }
+      ],
+      [
+        {
+          title: 'Importo',
+          description: `${this.transaction()!.amount} ${this.currencyService.defaultAccountCurrency}`
+        },
+        {
+          title: 'Data operazione',
+          description: this.transaction()!.createdAt,
+          pipe: PipeName.Date
+        }
+      ]
+    ]
+  }));
+
+  sourceTransactionDetail: Signal<CardConfig | undefined> = computed(() => {
+    const sourceUserProfile = this.sourceUserProfile();
+    const sourceBankAccount = this.sourceBankAccount();
+    if (!sourceUserProfile || !sourceBankAccount) {
+      return undefined;
+    }
+    return {
+      title: 'Ordinante',
+      rows: [
+        [
+          {
+            title: 'Nome',
+            description: `${sourceUserProfile!.name} ${sourceUserProfile!.surname}`
+          },
+          {
+            title: 'Numero Conto',
+            description: sourceBankAccount!.accountNumber
+          }
+        ],
+        [
+          {
+            title: 'Filiale',
+            description: sourceBankAccount!.bankId,
+            pipe: PipeName.BankName
+          },
+          {
+            title: 'Codice IBAN',
+            description: sourceBankAccount!.ibanCode
+          }
+        ]
+      ]
+    };
+  });
+
+  destinationTransactionDetail: Signal<CardConfig | undefined> = computed(() => {
+    const destinationUserProfile = this.destinationUserProfile();
+    const destinationBankAccount = this.destinationBankAccount();
+    if (!destinationUserProfile || !destinationBankAccount) {
+      return undefined;
+    }
+    return {
+      title: 'Beneficiario',
+      rows: [
+        [
+          {
+            title: 'Nome',
+            description: `${destinationUserProfile!.name} ${destinationUserProfile!.surname}`
+          },
+          {
+            title: 'Numero Conto',
+            description: destinationBankAccount!.accountNumber
+          }
+        ],
+        [
+          {
+            title: 'Filiale',
+            description: destinationBankAccount!.bankId,
+            pipe: PipeName.BankName
+          },
+          {
+            title: 'Codice IBAN',
+            description: destinationBankAccount!.ibanCode
+          }
+        ]
+      ]
+    };
+  });
 }

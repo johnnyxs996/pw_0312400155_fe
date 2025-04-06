@@ -1,7 +1,5 @@
 import { inject, Pipe, PipeTransform } from '@angular/core';
 
-import { map, Observable } from 'rxjs';
-
 import { BankService } from './bank.service';
 
 @Pipe({
@@ -10,7 +8,10 @@ import { BankService } from './bank.service';
 export class BankNamePipe implements PipeTransform {
   private bankService = inject(BankService);
 
-  transform(bankId: string): Observable<string> {
-    return this.bankService.getBank(bankId).pipe(map((bank) => bank.name));
+  transform(bankId: string | undefined): string {
+    if (!bankId) {
+      return 'N/A';
+    }
+    return this.bankService.getBank(bankId)?.name || 'N/A';
   }
 }

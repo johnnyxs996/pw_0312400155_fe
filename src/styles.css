@@ -93,6 +93,10 @@ a {
   justify-content: end;
 }
 
+.items-start {
+  align-items: start;
+}
+
 .items-center {
   align-items: center;
 }
@@ -101,12 +105,16 @@ a {
   align-items: end;
 }
 
+.text-left {
+  text-align: left;
+}
+
 .text-center {
   text-align: center;
 }
 
-.text-left {
-  text-align: left;
+.text-right {
+  text-align: right;
 }
 
 .overflow-x-auto {

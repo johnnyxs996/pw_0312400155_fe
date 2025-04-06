@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -6,6 +6,7 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { GlobalSpinnerService } from './shared/services/global-spinner.service';
 import { SidenavService } from './shared/services/sidenav.service';
 import { SidenavLayoutComponent } from './shared/components/sidenav-layout/sidenav-layout.component';
+import { ManagementService } from './management/management.service';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +14,13 @@ import { SidenavLayoutComponent } from './shared/components/sidenav-layout/siden
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'front-end';
   protected globalSpinnerService = inject(GlobalSpinnerService);
   protected sidenavService = inject(SidenavService);
+  protected managementService = inject(ManagementService);
+
+  ngOnInit() {
+    this.managementService.bootstrapBanksAndProducts();
+  }
 }

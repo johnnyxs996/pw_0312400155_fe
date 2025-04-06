@@ -7,15 +7,27 @@
   }
 
   @for (row of cardRows(); track $index) {
-    <div class="flex flex-row w-full">
+    <div class="detail-card-row">
       @for (col of row; track $index) {
         <div class="flex flex-col flex-1">
-          <div class="flex flex-row justify-between">
-            <div class="flex flex-col w-full justify-start-start">
+          <div class="flex flex-row flex-1">
+            <div class="flex flex-col flex-1 items-start">
               <p><strong>{{ col.title }}</strong></p>
             </div>
-            <div class="flex flex-col w-full items-end">
-              <p>{{ col.description }}</p>
+            <div class="flex flex-col flex-1 items-end">
+              <p class="text-right">
+                @switch (col.pipe) {
+                  @case (PipeName.Date) {
+                    {{ col.description | date }}
+                  }
+                  @case (PipeName.BankName) {
+                    {{ col.description | bankName }}
+                  }
+                  @default {
+                    {{ col.description }}
+                  }
+                }
+              </p>
             </div>
           </div>
         </div>

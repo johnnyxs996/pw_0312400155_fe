@@ -32,7 +32,7 @@
         <mat-select formControlName="destinationAccountId" required>
           @for (destinationBankAccount of destinationBankAccounts(); track destinationBankAccount.id) {
             <mat-option [value]="destinationBankAccount.id">
-              {{ destinationBankAccount.ibanCode }} - {{ destinationBankAccount.bankId | bankName | async }}
+              {{ destinationBankAccount.ibanCode }} - {{ destinationBankAccount.bankId | bankName }}
               {{ destinationBankAccount.userProfileId }}
             </mat-option>
           }

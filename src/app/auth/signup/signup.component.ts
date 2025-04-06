@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -12,6 +12,7 @@ import { NotificationService } from '../../shared/services/notification.service'
 import { UserProfileService } from '../../user-profile/user-profile.service';
 import { UserProfilesPost } from '../../../api';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { SidenavService } from '../../shared/services/sidenav.service';
 
 @Component({
   selector: 'app-signup',
@@ -32,10 +33,11 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit {
   private fb = inject(FormBuilder);
   private notificationService = inject(NotificationService);
   private userProfileService = inject(UserProfileService);
+  private sidenavService = inject(SidenavService);
 
   protected hidePassword = true;
 
@@ -50,6 +52,10 @@ export class SignupComponent {
     birthState: [null, [Validators.minLength(2), Validators.maxLength(2)]],
     birthCity: [null]
   });
+
+  ngOnInit() {
+    this.sidenavService.setNavlistConfig([]);
+  }
 
   signup(): void {
     if (this.signupForm.invalid) {

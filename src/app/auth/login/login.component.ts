@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
@@ -13,6 +13,7 @@ import { ErrorModelType } from '../../shared/models/error.model';
 import { NotificationService } from '../../shared/services/notification.service';
 import { LoginPost, ModelError } from '../../../api';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { SidenavService } from '../../shared/services/sidenav.service';
 
 @Component({
   selector: 'app-login',
@@ -28,10 +29,11 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
     PageHeaderComponent
   ]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private notificationService = inject(NotificationService);
+  private sidenavService = inject(SidenavService);
   private authService = inject(AuthService);
 
   protected hidePassword = true;
@@ -40,6 +42,10 @@ export class LoginComponent {
     email: [null, Validators.required],
     password: [null, Validators.required]
   });
+
+  ngOnInit() {
+    this.sidenavService.setNavlistConfig([]);
+  }
 
   login(): void {
     if (this.loginForm.invalid) {

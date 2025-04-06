@@ -1,75 +1,17 @@
 <app-page-header title="Dettaglio operazione" [showBackButton]="true"></app-page-header>
 
-<div class="flex flex-col w-full gap-8">
-  <div class="flex flex-row w-full flex-wrap gap-8">
-    <div class="flex flex-col gap-4 flex-1">
-      <strong>Tipologia</strong>
-      {{ transaction()!.type | transactionTypeName }}
-    </div>
-    <div class="flex flex-col gap-4 flex-1">
-      <strong>Causale</strong>
-      {{ transaction()!.description }}
-    </div>
-  </div>
-
-  <div class="flex flex-row w-full flex-wrap gap-8">
-    <div class="flex flex-col gap-4 flex-1">
-      <strong>Importo</strong>
-      {{ transaction()!.amount }} {{ currencyService.defaultAccountCurrency }}
-    </div>
-    <div class="flex flex-col gap-4 flex-1">
-      <strong>Data operazione</strong>
-      {{ transaction()!.createdAt | date }}
-    </div>
-  </div>
+<div class="flex flex-col w-full gap-8 items-center">
+  @if(baseTransactionDetail(); as baseDetails) {
+    <app-detail-card [config]="baseDetails"></app-detail-card>
+  }
 
   @if (transactionIsOfTypeTransfer()) {
-    <mat-divider></mat-divider>
-    <h3>Ordinante</h3>
-    <div class="flex flex-row w-full flex-wrap gap-8">
-      <div class="flex flex-col gap-4 flex-1">
-        <strong>Nome</strong>
-        {{ sourceUserProfile()!.name }} {{ sourceUserProfile()!.surname }}
-      </div>
-      <div class="flex flex-col gap-4 flex-1">
-        <strong>Numero Conto</strong>
-        {{ sourceBankAccount()!.accountNumber }}
-      </div>
-    </div>
+    @if (sourceTransactionDetail()) {
+      <app-detail-card [config]="sourceTransactionDetail()!"></app-detail-card>
+    }
 
-    <div class="flex flex-row w-full flex-wrap gap-8">
-      <div class="flex flex-col gap-4 flex-1">
-        <strong>Banca</strong>
-        {{ sourceBankAccount()!.bankId | bankName | async }}
-      </div>
-      <div class="flex flex-col gap-4 flex-1">
-        <strong>Codice IBAN</strong>
-        {{ sourceBankAccount()!.ibanCode }}
-      </div>
-    </div>
-
-    <mat-divider></mat-divider>
-    <h3>Beneficiario</h3>
-    <div class="flex flex-row w-full flex-wrap gap-8">
-      <div class="flex flex-col gap-4 flex-1">
-        <strong>Nome</strong>
-        {{ destinationUserProfile()!.name }} {{ destinationUserProfile()!.surname }}
-      </div>
-      <div class="flex flex-col gap-4 flex-1">
-        <strong>Numero Conto</strong>
-        {{ destinationBankAccount()!.accountNumber }}
-      </div>
-    </div>
-
-    <div class="flex flex-row w-full flex-wrap gap-8">
-      <div class="flex flex-col gap-4 flex-1">
-        <strong>Banca</strong>
-        {{ destinationBankAccount()!.bankId | bankName | async }}
-      </div>
-      <div class="flex flex-col gap-4 flex-1">
-        <strong>Codice IBAN</strong>
-        {{ destinationBankAccount()!.ibanCode }}
-      </div>
-    </div>
+    @if (destinationTransactionDetail()) {
+      <app-detail-card [config]="destinationTransactionDetail()!"></app-detail-card>
+    }
   }
 </div>

@@ -9,7 +9,7 @@
     <mat-table [dataSource]="userBankAccounts()!">
       <ng-container matColumnDef="bankId">
         <mat-header-cell *matHeaderCellDef> Filiale </mat-header-cell>
-        <mat-cell *matCellDef="let bankAccount"> {{ bankAccount.bankId | bankName | async }} </mat-cell>
+        <mat-cell *matCellDef="let bankAccount"> {{ bankAccount.bankId | bankName }} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="createdAt">

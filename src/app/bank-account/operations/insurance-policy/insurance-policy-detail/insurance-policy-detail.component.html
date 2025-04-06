@@ -1,11 +1,7 @@
 <app-page-header title="Dettagli polizza assicurativa" [showBackButton]="true"></app-page-header>
 
-<mat-card class="material-card">
-  <mat-card-title>Dettagli polizza</mat-card-title>
-
-  <p><b>Tipologia:</b> {{ insurancePolicy()!.insurancePolicyProductId }}</p>
-  <p><b>Stato:</b> {{ insurancePolicy()!.status! | insurancePolicyStatusName }}</p>
-  <p><b>Data inizio:</b> {{ insurancePolicy()!.startDate | date }}</p>
-  <p><b>Data fine:</b> {{ insurancePolicy()!.endDate | date }}</p>
-  <p>Recupera amount da insurance policy product</p>
-</mat-card>
+<div class="flex flex-col w-full gap-8 items-center">
+  @if(cardDetail(); as cardDetail) {
+    <app-detail-card [config]="cardDetail"></app-detail-card>
+  }
+</div>

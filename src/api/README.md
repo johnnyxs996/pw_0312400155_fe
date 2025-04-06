@@ -1,6 +1,6 @@
 # @
 
-API for managing a financial system.
+API for managing UniPegaso Banking financial system.
 
 The version of the OpenAPI document: 1.0.0
 
