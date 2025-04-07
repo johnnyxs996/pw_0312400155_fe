@@ -1,4 +1,4 @@
-import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
+import { DATE_PIPE_DEFAULT_OPTIONS, DatePipe } from '@angular/common';
 import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
@@ -35,6 +35,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([unauthorizedInterceptor]), withInterceptorsFromDi()),
     provideNativeDateAdapter(),
     { provide: BASE_PATH, useValue: environment.apiHost },
+    DatePipe,
     { provide: DATE_PIPE_DEFAULT_OPTIONS, useValue: { dateFormat: 'dd/MM/yyyy HH:mm' } },
     { provide: MAT_DATE_LOCALE, useValue: 'it-IT' }
   ]

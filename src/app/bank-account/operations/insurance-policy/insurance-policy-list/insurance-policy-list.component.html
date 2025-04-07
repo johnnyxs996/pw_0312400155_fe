@@ -1,50 +1,8 @@
-<div class="flex flex-row flex-1 justify-between items-center">
-  <h2>Polizze Assicurative</h2>
-  <button mat-mini-fab [routerLink]="['new']">
-    <mat-icon aria-hidden="false" aria-label="Nuova polizza assicurativa" fontIcon="add"></mat-icon>
-  </button>
-</div>
-
-@if (insurancePolicies()!.length) {
-  <div>
-    <mat-table [dataSource]="insurancePolicies()!">
-      <ng-container matColumnDef="startDate">
-        <mat-header-cell *matHeaderCellDef> Data sottoscrizione </mat-header-cell>
-        <mat-cell *matCellDef="let insurancePolicy"> {{ insurancePolicy.startDate | date }} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="endDate">
-        <mat-header-cell *matHeaderCellDef> Data termine </mat-header-cell>
-        <mat-cell *matCellDef="let insurancePolicy"> {{ insurancePolicy.endDate | date }} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef> Stato </mat-header-cell>
-        <mat-cell *matCellDef="let insurancePolicy"> {{ insurancePolicy.status | insurancePolicyStatusName }} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="insurancePolicyProductId">
-        <mat-header-cell *matHeaderCellDef> Polizza </mat-header-cell>
-        <mat-cell *matCellDef="let insurancePolicy"> {{ insurancePolicy.insurancePolicyProductId }} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef> Azioni </mat-header-cell>
-        <mat-cell *matCellDef="let insurancePolicy">
-          <button mat-button [routerLink]="[insurancePolicy.id]">
-            Dettaglio
-          </button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
-    </mat-table>
-  </div>
-} @else {
-  <div class="flex flex-col flex-1 justify-between items-center">
-    <h3>Non ci sono polizze assicurative</h3>
-    <img class="illustration" src="assets/illustrations/empty-data.svg"/>
-    <h3>Per cominciare, sottoscrivine una</h3>
-  </div>
-}
+<app-table
+  title="Polizze assicurative"
+  newItemRoute="/bank-account/{{ bankAccountId() }}/insurance-policy/new"
+  [columnConfig]="tableColumns"
+  [rowsData]="tableRows()"
+  emptyDataTitle="Non ci sono polizze assicurative"
+  emptyDataDescription="Per cominciare, creane una tramite l'apposito pulsante"
+></app-table>

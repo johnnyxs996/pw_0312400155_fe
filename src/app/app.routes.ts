@@ -17,6 +17,7 @@ export const routes: Routes = [
   },
   {
     path: 'management',
+    loadComponent: () => import('./management/management.component').then((c) => c.ManagementComponent),
     loadChildren: () => import('./management/management.routes').then((r) => r.routes)
   }
   // {

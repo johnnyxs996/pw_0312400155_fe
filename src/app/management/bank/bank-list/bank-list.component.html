@@ -1,1 +1,8 @@
-<p>bank-list works!</p>
+<app-table
+  title="Filiali"
+  newItemRoute="/management/bank/new"
+  [columnConfig]="tableColumns"
+  [rowsData]="tableRows()"
+  emptyDataTitle="Non ci sono banche"
+  emptyDataDescription="Per cominciare, creane una tramite l'apposito pulsante"
+></app-table>

@@ -1,0 +1,42 @@
+<div class="flex flex-col flex-1 justify-between items-center">
+  @if (title() || newItemRoute()) {
+    <div class="flex flex-row flex-1 w-full justify-end items-center">
+      @if (title(); as title) {
+        <h2 class="flex flex-1">{{ title }}</h2>
+      }
+
+      @if (newItemRoute(); as newItemRoute) {
+        <button mat-mini-fab [routerLink]="[newItemRoute]">
+          <mat-icon aria-hidden="false" aria-label="Crea nuovo" fontIcon="add"></mat-icon>
+        </button>
+      }
+    </div>
+  }
+
+  @if (rowsData().length) {
+    <mat-table [dataSource]="rowsData()">
+      @for (col of columnConfig(); track col.name) {
+        <ng-container [matColumnDef]="col.name">
+          <mat-header-cell *matHeaderCellDef> {{ col.label }} </mat-header-cell>
+
+          <mat-cell *matCellDef="let row">
+            @if (row[col.name]?.route) {
+              <button mat-button [routerLink]="[row[col.name].route]">
+                {{ row[col.name].label }}
+              </button>
+            } @else {
+              {{ row[col.name].label }}
+            }
+          </mat-cell>
+        </ng-container>
+      }
+
+      <mat-header-row *matHeaderRowDef="columnNames()"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columnNames()"></mat-row>
+    </mat-table>
+  } @else {
+    <h3>{{ emptyDataTitle() }}</h3>
+    <img class="illustration" src="assets/illustrations/empty-data.svg"/>
+    <h3>{{ emptyDataDescription() }}</h3>
+  }
+</div>
