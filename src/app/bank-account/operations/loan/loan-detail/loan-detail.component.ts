@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, computed, inject, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -7,11 +8,8 @@ import { map } from 'rxjs';
 import { LoanGet } from '../../../../../api';
 import { CurrencyService } from '../../../../shared/services/currency.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
-import {
-  CardConfig,
-  DetailCardComponent,
-  PipeName
-} from '../../../../shared/components/detail-card/detail-card.component';
+import { CardConfig, DetailCardComponent } from '../../../../shared/components/detail-card/detail-card.component';
+import { LoanStatusNamePipe } from '../loan-status-name.pipe';
 
 @Component({
   selector: 'app-loan-detail',
@@ -21,6 +19,7 @@ import {
 })
 export class LoanDetailComponent {
   private route = inject(ActivatedRoute);
+  protected datePipe = inject(DatePipe);
   protected currencyService = inject(CurrencyService);
 
   protected loan = toSignal<LoanGet>(this.route.data.pipe(map((data) => data['loan'])));
@@ -39,30 +38,26 @@ export class LoanDetailComponent {
           },
           {
             title: 'Stato',
-            description: loan.status,
-            pipe: PipeName.LoanStatusName
+            description: new LoanStatusNamePipe().transform(loan.status!)
           }
         ],
         [
           {
             title: 'Data inizio',
-            description: loan.startDate,
-            pipe: PipeName.Date
+            description: this.datePipe.transform(loan.startDate)
           },
           {
             title: 'Data fine',
-            description: loan.endDate,
-            pipe: PipeName.Date
+            description: this.datePipe.transform(loan.endDate)
           }
         ],
         [
           {
             title: 'Ammontare',
-            description: `${loan.amount} ${this.currencyService.defaultAccountCurrency}`,
-            pipe: PipeName.Date
+            description: `${loan.amount} ${this.currencyService.defaultAccountCurrency}`
           }
         ]
       ]
-    };
+    } as CardConfig;
   });
 }

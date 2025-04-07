@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, computed, inject, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -8,11 +9,8 @@ import { map } from 'rxjs';
 import { InsurancePolicyGet } from '../../../../../api';
 import { CurrencyService } from '../../../../shared/services/currency.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
-import {
-  CardConfig,
-  DetailCardComponent,
-  PipeName
-} from '../../../../shared/components/detail-card/detail-card.component';
+import { CardConfig, DetailCardComponent } from '../../../../shared/components/detail-card/detail-card.component';
+import { InsurancePolicyStatusNamePipe } from '../insurance-policy-status-name.pipe';
 
 @Component({
   selector: 'app-insurance-policy-detail',
@@ -22,6 +20,7 @@ import {
 })
 export class InsurancePolicyDetailComponent {
   private route = inject(ActivatedRoute);
+  protected datePipe = inject(DatePipe);
   protected currencyService = inject(CurrencyService);
 
   protected insurancePolicy = toSignal<InsurancePolicyGet>(
@@ -42,30 +41,26 @@ export class InsurancePolicyDetailComponent {
           },
           {
             title: 'Stato',
-            description: insurancePolicy.status,
-            pipe: PipeName.InsurancePolicyStatusName
+            description: new InsurancePolicyStatusNamePipe().transform(insurancePolicy.status!)
           }
         ],
         [
           {
             title: 'Data inizio',
-            description: insurancePolicy.startDate,
-            pipe: PipeName.Date
+            description: this.datePipe.transform(insurancePolicy.startDate)
           },
           {
             title: 'Data fine',
-            description: insurancePolicy.endDate,
-            pipe: PipeName.Date
+            description: this.datePipe.transform(insurancePolicy.endDate)
           }
         ],
         [
           {
-            title: 'Ammontare',
-            description: insurancePolicy.insurancePolicyProductId,
-            pipe: PipeName.InsurancePolicyProductAmount
+            title: 'Tipologia',
+            description: insurancePolicy.insurancePolicyProductId
           }
         ]
       ]
-    };
+    } as CardConfig;
   });
 }

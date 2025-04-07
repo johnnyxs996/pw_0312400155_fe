@@ -4,15 +4,15 @@
   </button>
 
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>
+    <button mat-menu-item [routerLink]="['/management']">
       <mat-icon>account_circle</mat-icon>
-      <span>Profilo</span>
+      <span>Gestione sistema</span>
     </button>
-    <button mat-menu-item (click)="changeAccount()">
+    <button mat-menu-item [routerLink]="['/bank-account']">
       <mat-icon>switch_account</mat-icon>
-      <span>Cambia Conto</span>
+      <span>Gestione conti</span>
     </button>
-    <button mat-menu-item (click)="logout()">
+    <button mat-menu-item [routerLink]="['/auth', 'logout']">
       <mat-icon>logout</mat-icon>
       <span>Esci</span>
     </button>

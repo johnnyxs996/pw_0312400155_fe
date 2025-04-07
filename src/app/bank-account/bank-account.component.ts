@@ -2,11 +2,6 @@ import { Component, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { filter, map, startWith } from 'rxjs';
 
 import { getAllPathParams } from '../shared/utils/route';
@@ -14,7 +9,7 @@ import { SidenavService } from '../shared/services/sidenav.service';
 
 @Component({
   selector: 'app-bank-account',
-  imports: [MatIconModule, MatButtonModule, MatTabsModule, MatSidenavModule, MatToolbarModule, RouterOutlet],
+  imports: [RouterOutlet],
   templateUrl: './bank-account.component.html',
   styleUrl: './bank-account.component.css'
 })

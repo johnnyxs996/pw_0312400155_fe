@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -35,7 +34,6 @@ import { BankNamePipe } from '../../../../management/bank/bank-name.pipe';
     MatSelectModule,
     TransactionTypeNamePipe,
     BankNamePipe,
-    AsyncPipe,
     PageHeaderComponent
   ],
   templateUrl: './transaction-new.component.html',

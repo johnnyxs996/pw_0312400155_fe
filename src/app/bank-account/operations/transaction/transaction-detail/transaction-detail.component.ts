@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, computed, inject, OnInit, Signal, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -12,12 +13,7 @@ import { BankAccountGet, TransactionGet, TransactionsPost, UserProfileGet } from
 import { TransactionTypeNamePipe } from '../transaction-type-name.pipe';
 import { CurrencyService } from '../../../../shared/services/currency.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
-import { BankNamePipe } from '../../../../management/bank/bank-name.pipe';
-import {
-  CardConfig,
-  DetailCardComponent,
-  PipeName
-} from '../../../../shared/components/detail-card/detail-card.component';
+import { CardConfig, DetailCardComponent } from '../../../../shared/components/detail-card/detail-card.component';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -27,6 +23,7 @@ import {
 })
 export class TransactionDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
+  private datePipe = inject(DatePipe);
   private bankAccountService = inject(BankAccountService);
   protected currencyService = inject(CurrencyService);
   private userProfileService = inject(UserProfileService);
@@ -63,31 +60,33 @@ export class TransactionDetailComponent implements OnInit {
     }
   }
 
-  baseTransactionDetail: Signal<CardConfig> = computed(() => ({
-    rows: [
-      [
-        {
-          title: 'Tipologia',
-          description: new TransactionTypeNamePipe().transform(this.transaction()!.type)
-        },
-        {
-          title: 'Causale',
-          description: this.transaction()!.description
-        }
-      ],
-      [
-        {
-          title: 'Importo',
-          description: `${this.transaction()!.amount} ${this.currencyService.defaultAccountCurrency}`
-        },
-        {
-          title: 'Data operazione',
-          description: this.transaction()!.createdAt,
-          pipe: PipeName.Date
-        }
-      ]
-    ]
-  }));
+  baseTransactionDetail: Signal<CardConfig> = computed(
+    () =>
+      ({
+        rows: [
+          [
+            {
+              title: 'Tipologia',
+              description: new TransactionTypeNamePipe().transform(this.transaction()!.type)
+            },
+            {
+              title: 'Causale',
+              description: this.transaction()!.description
+            }
+          ],
+          [
+            {
+              title: 'Importo',
+              description: `${this.transaction()!.amount} ${this.currencyService.defaultAccountCurrency}`
+            },
+            {
+              title: 'Data operazione',
+              description: this.datePipe.transform(this.transaction()!.createdAt)
+            }
+          ]
+        ]
+      }) as CardConfig
+  );
 
   sourceTransactionDetail: Signal<CardConfig | undefined> = computed(() => {
     const sourceUserProfile = this.sourceUserProfile();
@@ -111,8 +110,7 @@ export class TransactionDetailComponent implements OnInit {
         [
           {
             title: 'Filiale',
-            description: sourceBankAccount!.bankId,
-            pipe: PipeName.BankName
+            description: sourceBankAccount!.bankId
           },
           {
             title: 'Codice IBAN',
@@ -145,8 +143,7 @@ export class TransactionDetailComponent implements OnInit {
         [
           {
             title: 'Filiale',
-            description: destinationBankAccount!.bankId,
-            pipe: PipeName.BankName
+            description: destinationBankAccount!.bankId
           },
           {
             title: 'Codice IBAN',
