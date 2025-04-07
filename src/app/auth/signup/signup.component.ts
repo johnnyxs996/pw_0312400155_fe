@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -35,6 +35,7 @@ import { SidenavService } from '../../shared/services/sidenav.service';
 })
 export class SignupComponent implements OnInit {
   private fb = inject(FormBuilder);
+  private router = inject(Router);
   private notificationService = inject(NotificationService);
   private userProfileService = inject(UserProfileService);
   private sidenavService = inject(SidenavService);
@@ -67,6 +68,7 @@ export class SignupComponent implements OnInit {
       .pipe(
         tap((_) => {
           this.notificationService.create('Profilo creato correttamente', 'success');
+          this.router.navigate(['/auth', 'login']);
         })
       )
       .subscribe();
