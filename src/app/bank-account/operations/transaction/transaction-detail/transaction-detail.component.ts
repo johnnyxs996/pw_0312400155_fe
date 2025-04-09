@@ -14,6 +14,7 @@ import { TransactionTypeNamePipe } from '../transaction-type-name.pipe';
 import { CurrencyService } from '../../../../shared/services/currency.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { CardConfig, DetailCardComponent } from '../../../../shared/components/detail-card/detail-card.component';
+import { BankService } from '../../../../management/bank/bank.service';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -22,11 +23,12 @@ import { CardConfig, DetailCardComponent } from '../../../../shared/components/d
   styleUrl: './transaction-detail.component.css'
 })
 export class TransactionDetailComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private datePipe = inject(DatePipe);
-  private bankAccountService = inject(BankAccountService);
+  protected route = inject(ActivatedRoute);
+  protected datePipe = inject(DatePipe);
+  protected bankService = inject(BankService);
+  protected bankAccountService = inject(BankAccountService);
   protected currencyService = inject(CurrencyService);
-  private userProfileService = inject(UserProfileService);
+  protected userProfileService = inject(UserProfileService);
 
   sourceBankAccount = signal<BankAccountGet | undefined>(undefined);
   sourceUserProfile = signal<UserProfileGet | undefined>(undefined);
@@ -110,7 +112,7 @@ export class TransactionDetailComponent implements OnInit {
         [
           {
             title: 'Filiale',
-            description: sourceBankAccount!.bankId
+            description: this.bankService.getBank(sourceBankAccount!.bankId)?.name
           },
           {
             title: 'Codice IBAN',
@@ -143,7 +145,7 @@ export class TransactionDetailComponent implements OnInit {
         [
           {
             title: 'Filiale',
-            description: destinationBankAccount!.bankId
+            description: this.bankService.getBank(destinationBankAccount!.bankId)?.name
           },
           {
             title: 'Codice IBAN',

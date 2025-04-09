@@ -19,6 +19,7 @@ import { UserProfileService } from '../../../../user-profile/user-profile.servic
 import { LoanProductTypeNamePipe } from '../../../../management/loan-product/loan-product-type-name.pipe';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { LoanProductService } from '../../../../management/loan-product/loan-product.service';
+import { BankAccountService } from '../../../bank-account.service';
 
 @Component({
   selector: 'app-loan-new',
@@ -43,12 +44,13 @@ export class LoanNewComponent {
   protected route = inject(ActivatedRoute);
   protected router = inject(Router);
   protected fb = inject(FormBuilder);
+  protected bankAccountService = inject(BankAccountService);
   protected notificationService = inject(NotificationService);
   protected loanService = inject(LoanService);
   protected loanProductService = inject(LoanProductService);
   protected userProfileService = inject(UserProfileService);
 
-  bankAccountId = toSignal(this.route.parent!.parent!.params.pipe(map((params) => params['bankAccountId'])));
+  bankAccountId = this.bankAccountService.currentBankAccountId;
 
   // TODO: aggiungere prodotti di investimento
   loanProducts = toSignal(this.loanProductService.getLoanProducts());

@@ -11,6 +11,7 @@ import { CurrencyService } from '../../../../shared/services/currency.service';
 import { BankAccountDetailService } from '../../../bank-account-detail/bank-account-detail.service';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumns, TableRows } from '../../../../shared/components/table/table.model';
+import { BankAccountService } from '../../../bank-account.service';
 
 @Component({
   selector: 'app-transaction-list',
@@ -20,13 +21,12 @@ import { TableColumns, TableRows } from '../../../../shared/components/table/tab
 })
 export class TransactionListComponent implements OnDestroy, OnInit {
   private route = inject(ActivatedRoute);
+  protected bankAccountService = inject(BankAccountService);
   protected bankAccountDetailService = inject(BankAccountDetailService);
   protected currencyService = inject(CurrencyService);
   protected datePipe = inject(DatePipe);
 
-  bankAccountId: Signal<string> = toSignal(
-    this.route.parent!.parent!.params.pipe(map((params) => params['bankAccountId']))
-  );
+  bankAccountId = this.bankAccountService.currentBankAccountId;
   protected transactions = toSignal<TransactionGet[]>(this.route.data.pipe(map((data) => data['transactions'])));
 
   tableColumns: TableColumns = [

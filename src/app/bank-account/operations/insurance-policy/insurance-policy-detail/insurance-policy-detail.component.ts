@@ -11,6 +11,9 @@ import { CurrencyService } from '../../../../shared/services/currency.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { CardConfig, DetailCardComponent } from '../../../../shared/components/detail-card/detail-card.component';
 import { InsurancePolicyStatusNamePipe } from '../insurance-policy-status-name.pipe';
+import { InvestmentProductTypeNamePipe } from '../../../../management/investment-product/investment-product-type-name.pipe';
+import { InsurancePolicyProductService } from '../../../../management/insurance-policy-product/insurance-policy-product.service';
+import { InsurancePolicyProductTypeNamePipe } from '../../../../management/insurance-policy-product/insurance-policy-product-type-name.pipe';
 
 @Component({
   selector: 'app-insurance-policy-detail',
@@ -22,6 +25,7 @@ export class InsurancePolicyDetailComponent {
   private route = inject(ActivatedRoute);
   protected datePipe = inject(DatePipe);
   protected currencyService = inject(CurrencyService);
+  protected insurancePolicyProductService = inject(InsurancePolicyProductService);
 
   protected insurancePolicy = toSignal<InsurancePolicyGet>(
     this.route.data.pipe(map((data) => data['insurancePolicy']))
@@ -32,12 +36,21 @@ export class InsurancePolicyDetailComponent {
     if (!insurancePolicy) {
       return undefined;
     }
+    const insurancePolicyProduct = this.insurancePolicyProductService.getInsurancePolicyProduct(
+      insurancePolicy!.insurancePolicyProductId
+    );
     return {
       rows: [
         [
           {
+            title: 'Nome polizza',
+            description: insurancePolicyProduct?.name
+          }
+        ],
+        [
+          {
             title: 'Tipologia',
-            description: insurancePolicy.insurancePolicyProductId
+            description: new InsurancePolicyProductTypeNamePipe().transform(insurancePolicyProduct!.type!)
           },
           {
             title: 'Stato',
@@ -56,8 +69,12 @@ export class InsurancePolicyDetailComponent {
         ],
         [
           {
-            title: 'Tipologia',
-            description: insurancePolicy.insurancePolicyProductId
+            title: 'Premio annuo',
+            description: `${insurancePolicyProduct?.annualPremium} ${this.currencyService.defaultAccountCurrency}`
+          },
+          {
+            title: 'Massimale copertura',
+            description: `${insurancePolicyProduct?.coverageCap} ${this.currencyService.defaultAccountCurrency}`
           }
         ]
       ]

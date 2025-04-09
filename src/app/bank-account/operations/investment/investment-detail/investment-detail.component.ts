@@ -10,6 +10,8 @@ import { CurrencyService } from '../../../../shared/services/currency.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { CardConfig, DetailCardComponent } from '../../../../shared/components/detail-card/detail-card.component';
 import { InvestmentStatusNamePipe } from '../investment-status-name.pipe';
+import { InvestmentProductTypeNamePipe } from '../../../../management/investment-product/investment-product-type-name.pipe';
+import { InvestmentProductService } from '../../../../management/investment-product/investment-product.service';
 
 @Component({
   selector: 'app-investment-detail',
@@ -21,6 +23,7 @@ export class InvestmentDetailComponent {
   private route = inject(ActivatedRoute);
   protected datePipe = inject(DatePipe);
   protected currencyService = inject(CurrencyService);
+  protected investmentProductService = inject(InvestmentProductService);
 
   protected investment = toSignal<InvestmentGet>(this.route.data.pipe(map((data) => data['investment'])));
 
@@ -29,12 +32,13 @@ export class InvestmentDetailComponent {
     if (!investment) {
       return undefined;
     }
+    const investmentProduct = this.investmentProductService.getInvestmentProduct(investment.investmentProductId);
     return {
       rows: [
         [
           {
             title: 'Tipologia',
-            description: investment.investmentProductId
+            description: new InvestmentProductTypeNamePipe().transform(investmentProduct?.type!)
           },
           {
             title: 'Stato',
@@ -53,8 +57,12 @@ export class InvestmentDetailComponent {
         ],
         [
           {
-            title: 'Ammontare',
+            title: 'Investimento',
             description: `${investment.amount} ${this.currencyService.defaultAccountCurrency}`
+          },
+          {
+            title: 'Tasso',
+            description: `${investmentProduct?.rate}%`
           }
         ]
       ]

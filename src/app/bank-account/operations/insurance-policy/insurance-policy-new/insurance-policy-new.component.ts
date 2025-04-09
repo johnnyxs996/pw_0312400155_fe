@@ -19,6 +19,7 @@ import { UserProfileService } from '../../../../user-profile/user-profile.servic
 import { InsurancePolicyProductService } from '../../../../management/insurance-policy-product/insurance-policy-product.service';
 import { InsurancePolicyProductTypeNamePipe } from '../../../../management/insurance-policy-product/insurance-policy-product-type-name.pipe';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { BankAccountService } from '../../../bank-account.service';
 
 @Component({
   selector: 'app-insurance-policy-new',
@@ -43,12 +44,13 @@ export class InsurancePolicyNewComponent {
   protected route = inject(ActivatedRoute);
   protected router = inject(Router);
   protected fb = inject(FormBuilder);
+  protected bankAccountService = inject(BankAccountService);
   protected notificationService = inject(NotificationService);
   protected insurancePolicyService = inject(InsurancePolicyService);
   protected insurancePolicyProductService = inject(InsurancePolicyProductService);
   protected userProfileService = inject(UserProfileService);
 
-  bankAccountId = toSignal(this.route.parent!.parent!.params.pipe(map((params) => params['bankAccountId'])));
+  bankAccountId = this.bankAccountService.currentBankAccountId;
 
   // TODO: aggiungere prodotti di investimento
   insurancePolicyProducts = toSignal(this.insurancePolicyProductService.getInsurancePolicyProducts());

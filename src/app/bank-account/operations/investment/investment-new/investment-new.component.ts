@@ -19,6 +19,7 @@ import { UserProfileService } from '../../../../user-profile/user-profile.servic
 import { InvestmentProductTypeNamePipe } from '../../../../management/investment-product/investment-product-type-name.pipe';
 import { InvestmentProductService } from '../../../../management/investment-product/investment-product.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { BankAccountService } from '../../../bank-account.service';
 
 @Component({
   selector: 'app-investment-new',
@@ -43,12 +44,13 @@ export class InvestmentNewComponent {
   protected route = inject(ActivatedRoute);
   protected router = inject(Router);
   protected fb = inject(FormBuilder);
+  protected bankAccountService = inject(BankAccountService);
   protected notificationService = inject(NotificationService);
   protected investmentService = inject(InvestmentService);
   protected investmentProductService = inject(InvestmentProductService);
   protected userProfileService = inject(UserProfileService);
 
-  bankAccountId = toSignal(this.route.parent!.parent!.params.pipe(map((params) => params['bankAccountId'])));
+  bankAccountId = this.bankAccountService.currentBankAccountId;
 
   // TODO: aggiungere prodotti di investimento
   investmentProducts = toSignal(this.investmentProductService.getInvestmentProducts());

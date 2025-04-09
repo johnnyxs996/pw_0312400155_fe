@@ -1,6 +1,6 @@
 <app-table
   title="Operazioni"
-  newItemRoute="/bank-account/transaction/new"
+  newItemRoute="/bank-account/{{ bankAccountId() }}/transaction/new"
   [columnConfig]="tableColumns"
   [rowsData]="tableRows()"
   emptyDataTitle="Non ci sono operazioni"

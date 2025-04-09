@@ -1,10 +1,7 @@
 import { Component, computed, effect, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 
-import { filter, map, startWith } from 'rxjs';
-
-import { getAllPathParams } from '../shared/utils/route';
+import { BankAccountService } from './bank-account.service';
 import { SidenavService } from '../shared/services/sidenav.service';
 
 @Component({
@@ -16,17 +13,10 @@ import { SidenavService } from '../shared/services/sidenav.service';
 export class BankAccountComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  protected bankAccountService = inject(BankAccountService);
   protected sidenavService = inject(SidenavService);
 
-  protected pathParamsFromRoot = toSignal(
-    this.router.events.pipe(
-      filter((e) => e instanceof NavigationEnd),
-      map(() => getAllPathParams(this.route)),
-      startWith(getAllPathParams(this.route))
-    )
-  );
-
-  protected bankAccountId = computed(() => this.pathParamsFromRoot()?.['bankAccountId']);
+  protected bankAccountId = this.bankAccountService.currentBankAccountId;
   protected changeNavlistOnBankAccountIdChange = effect(() => {
     const bankAccountId = this.bankAccountId();
     const navlistRoutes: { routePath: string; routeLabel: string; iconName?: string }[] = [

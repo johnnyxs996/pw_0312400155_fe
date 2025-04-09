@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject, OnDestroy, OnInit, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { map } from 'rxjs';
 
@@ -11,6 +11,9 @@ import { CurrencyService } from '../../../../shared/services/currency.service';
 import { BankAccountDetailService } from '../../../bank-account-detail/bank-account-detail.service';
 import { TableColumns, TableRows } from '../../../../shared/components/table/table.model';
 import { TableComponent } from '../../../../shared/components/table/table.component';
+import { BankAccountService } from '../../../bank-account.service';
+import { InvestmentProductService } from '../../../../management/investment-product/investment-product.service';
+import { InvestmentProductTypeNamePipe } from '../../../../management/investment-product/investment-product-type-name.pipe';
 
 @Component({
   selector: 'app-investment-list',
@@ -20,11 +23,14 @@ import { TableComponent } from '../../../../shared/components/table/table.compon
 })
 export class InvestmentListComponent implements OnDestroy, OnInit {
   protected route = inject(ActivatedRoute);
+  protected router = inject(Router);
   protected datePipe = inject(DatePipe);
   protected bankAccountDetailService = inject(BankAccountDetailService);
+  protected bankAccountService = inject(BankAccountService);
+  protected investmentProductService = inject(InvestmentProductService);
   protected currencyService = inject(CurrencyService);
 
-  bankAccountId: Signal<string> = toSignal(this.route.params.pipe(map((params) => params['bankAccountId'])));
+  bankAccountId = this.bankAccountService.currentBankAccountId;
   protected investments = toSignal<InvestmentGet[]>(this.route.data.pipe(map((data) => data['investments'])));
 
   tableColumns: TableColumns = [
@@ -73,7 +79,9 @@ export class InvestmentListComponent implements OnDestroy, OnInit {
         label: new InvestmentStatusNamePipe().transform(investment.status!)
       },
       investmentProductId: {
-        label: investment.investmentProductId
+        label: new InvestmentProductTypeNamePipe().transform(
+          this.investmentProductService.getInvestmentProduct(investment.investmentProductId!)?.type!
+        )
       },
       actions: {
         label: 'Dettaglio',

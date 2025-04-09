@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -48,7 +48,7 @@ export class TransactionNewComponent implements OnInit {
   protected transactionService = inject(TransactionService);
   protected userProfileService = inject(UserProfileService);
 
-  sourceBankAccountId = toSignal(this.route.parent!.parent!.params.pipe(map((params) => params['bankAccountId'])));
+  sourceBankAccountId = this.bankAccountService.currentBankAccountId;
   transactionTypes = signal(Object.values(TransactionsPost.TypeEnum));
 
   selectedTransactionType = signal<TransactionsPost.TypeEnum>(TransactionsPost.TypeEnum.Transfer);
@@ -116,26 +116,28 @@ export class TransactionNewComponent implements OnInit {
   }
 
   transactionTypeChange(transactionType: TransactionsPost.TypeEnum) {
-    const transactionSourceAccountFormControl = this.transactionForm.get('sourceAccountId')!;
-    const transactionDestinationAccountFormControl = this.transactionForm.get('destinationAccountId')!;
+    const transactionSourceAccountFormControl: AbstractControl<string | null | undefined> =
+      this.transactionForm.get('sourceAccountId')!;
+    const transactionDestinationAccountFormControl: AbstractControl<string | null | undefined> =
+      this.transactionForm.get('destinationAccountId')!;
     switch (transactionType) {
       case TransactionsPost.TypeEnum.Transfer:
-        this.transactionForm.get('sourceAccountId')!.setValue(this.sourceBankAccountId());
-        this.transactionForm.get('sourceAccountId')!.setValidators(Validators.required);
-        this.transactionForm.get('destinationAccountId')!.setValue(null);
-        this.transactionForm.get('destinationAccountId')!.setValidators(Validators.required);
+        transactionSourceAccountFormControl.setValue(this.sourceBankAccountId());
+        transactionSourceAccountFormControl.setValidators(Validators.required);
+        transactionDestinationAccountFormControl.setValue(null);
+        transactionDestinationAccountFormControl.setValidators(Validators.required);
         break;
       case TransactionsPost.TypeEnum.Deposit:
-        this.transactionForm.get('sourceAccountId')!.setValue(null);
-        this.transactionForm.get('sourceAccountId')!.clearValidators();
-        this.transactionForm.get('destinationAccountId')!.setValue(this.sourceBankAccountId());
-        this.transactionForm.get('destinationAccountId')!.setValidators(Validators.required);
+        transactionSourceAccountFormControl.clearValidators();
+        transactionSourceAccountFormControl.setValue(null);
+        transactionDestinationAccountFormControl.setValue(this.sourceBankAccountId());
+        transactionDestinationAccountFormControl.setValidators(Validators.required);
         break;
       case TransactionsPost.TypeEnum.Withdraw:
-        this.transactionForm.get('sourceAccountId')!.setValidators(Validators.required);
-        this.transactionForm.get('sourceAccountId')!.setValue(this.sourceBankAccountId());
-        this.transactionForm.get('destinationAccountId')!.clearValidators();
-        this.transactionForm.get('destinationAccountId')!.setValue(null);
+        transactionSourceAccountFormControl.setValidators(Validators.required);
+        transactionSourceAccountFormControl.setValue(this.sourceBankAccountId());
+        transactionDestinationAccountFormControl.clearValidators();
+        transactionDestinationAccountFormControl.setValue(null);
         break;
     }
     this.transactionForm.get('sourceAccountId')!.updateValueAndValidity({ emitEvent: false });

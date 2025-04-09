@@ -10,6 +10,8 @@ import { CurrencyService } from '../../../../shared/services/currency.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { CardConfig, DetailCardComponent } from '../../../../shared/components/detail-card/detail-card.component';
 import { LoanStatusNamePipe } from '../loan-status-name.pipe';
+import { LoanProductService } from '../../../../management/loan-product/loan-product.service';
+import { LoanProductTypeNamePipe } from '../../../../management/loan-product/loan-product-type-name.pipe';
 
 @Component({
   selector: 'app-loan-detail',
@@ -21,6 +23,7 @@ export class LoanDetailComponent {
   private route = inject(ActivatedRoute);
   protected datePipe = inject(DatePipe);
   protected currencyService = inject(CurrencyService);
+  protected loanProductService = inject(LoanProductService);
 
   protected loan = toSignal<LoanGet>(this.route.data.pipe(map((data) => data['loan'])));
 
@@ -29,12 +32,13 @@ export class LoanDetailComponent {
     if (!loan) {
       return undefined;
     }
+    const loanProduct = this.loanProductService.getLoanProduct(loan.loanProductId);
     return {
       rows: [
         [
           {
             title: 'Tipologia',
-            description: loan.loanProductId
+            description: new LoanProductTypeNamePipe().transform(loanProduct!.type!)
           },
           {
             title: 'Stato',
@@ -55,6 +59,10 @@ export class LoanDetailComponent {
           {
             title: 'Ammontare',
             description: `${loan.amount} ${this.currencyService.defaultAccountCurrency}`
+          },
+          {
+            title: 'Tasso',
+            description: `${loanProduct?.rate}%`
           }
         ]
       ]

@@ -11,6 +11,9 @@ import { BankAccountDetailService } from '../../../bank-account-detail/bank-acco
 import { TableColumns, TableRows } from '../../../../shared/components/table/table.model';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { LoanStatusNamePipe } from '../loan-status-name.pipe';
+import { LoanProductService } from '../../../../management/loan-product/loan-product.service';
+import { LoanProductTypeNamePipe } from '../../../../management/loan-product/loan-product-type-name.pipe';
+import { BankAccountService } from '../../../bank-account.service';
 
 @Component({
   selector: 'app-loan-list',
@@ -21,10 +24,12 @@ import { LoanStatusNamePipe } from '../loan-status-name.pipe';
 export class LoanListComponent implements OnDestroy, OnInit {
   protected route = inject(ActivatedRoute);
   protected datePipe = inject(DatePipe);
+  protected loanProductService = inject(LoanProductService);
+  protected bankAccountService = inject(BankAccountService);
   protected bankAccountDetailService = inject(BankAccountDetailService);
   protected currencyService = inject(CurrencyService);
 
-  bankAccountId: Signal<string> = toSignal(this.route.params.pipe(map((params) => params['bankAccountId'])));
+  bankAccountId = this.bankAccountService.currentBankAccountId;
   protected loans = toSignal<LoanGet[]>(this.route.data.pipe(map((data) => data['loans'])));
 
   tableColumns: TableColumns = [
@@ -46,10 +51,6 @@ export class LoanListComponent implements OnDestroy, OnInit {
     },
     {
       name: 'loanProductId',
-      label: 'Tipologia'
-    },
-    {
-      name: 'investmentProductId',
       label: 'Tipologia'
     },
     {
@@ -77,7 +78,9 @@ export class LoanListComponent implements OnDestroy, OnInit {
         label: new LoanStatusNamePipe().transform(loan.status!)
       },
       loanProductId: {
-        label: loan.loanProductId
+        label: new LoanProductTypeNamePipe().transform(
+          this.loanProductService.getLoanProduct(loan.loanProductId)?.type!
+        )
       },
       actions: {
         label: 'Dettaglio',

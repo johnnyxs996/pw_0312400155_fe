@@ -5,11 +5,11 @@ import { ActivatedRoute } from '@angular/router';
 
 import { map } from 'rxjs';
 
-import { BankNamePipe } from '../../management/bank/bank-name.pipe';
 import { BankAccountGet } from '../../../api';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { TableColumns, TableRows } from '../../shared/components/table/table.model';
 import { SidenavService } from '../../shared/services/sidenav.service';
+import { BankService } from '../../management/bank/bank.service';
 
 @Component({
   selector: 'app-bank-account-list',
@@ -20,6 +20,7 @@ import { SidenavService } from '../../shared/services/sidenav.service';
 export class BankAccountListComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private datePipe = inject(DatePipe);
+  private bankService = inject(BankService);
   private sidenavService = inject(SidenavService);
 
   protected userBankAccounts = toSignal<BankAccountGet[]>(
@@ -52,7 +53,7 @@ export class BankAccountListComponent implements OnInit {
     }
     return userBankAccounts.map((userBankAccount: BankAccountGet) => ({
       bankId: {
-        label: new BankNamePipe().transform(userBankAccount.bankId)
+        label: this.bankService.getBank(userBankAccount.bankId)?.name
       },
       createdAt: {
         label: this.datePipe.transform(userBankAccount.createdAt)

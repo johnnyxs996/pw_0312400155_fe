@@ -10,6 +10,9 @@ import { InsurancePolicyStatusNamePipe } from '../insurance-policy-status-name.p
 import { BankAccountDetailService } from '../../../bank-account-detail/bank-account-detail.service';
 import { TableComponent } from '../../../../shared/components/table/table.component';
 import { TableColumns, TableRows } from '../../../../shared/components/table/table.model';
+import { BankAccountService } from '../../../bank-account.service';
+import { InsurancePolicyProductService } from '../../../../management/insurance-policy-product/insurance-policy-product.service';
+import { InsurancePolicyProductTypeNamePipe } from '../../../../management/insurance-policy-product/insurance-policy-product-type-name.pipe';
 
 @Component({
   selector: 'app-insurance-policy-list',
@@ -20,9 +23,11 @@ import { TableColumns, TableRows } from '../../../../shared/components/table/tab
 export class InsurancePolicyListComponent implements OnDestroy, OnInit {
   private route = inject(ActivatedRoute);
   private datePipe = inject(DatePipe);
+  private bankAccountService = inject(BankAccountService);
   private bankAccountDetailService = inject(BankAccountDetailService);
+  private insurancePolicyProductService = inject(InsurancePolicyProductService);
 
-  bankAccountId: Signal<string> = toSignal(this.route.params.pipe(map((params) => params['bankAccountId'])));
+  bankAccountId = this.bankAccountService.currentBankAccountId;
   protected insurancePolicies = toSignal<InsurancePolicyGet[]>(
     this.route.data.pipe(map((data) => data['insurancePolicies']))
   );
@@ -64,6 +69,11 @@ export class InsurancePolicyListComponent implements OnDestroy, OnInit {
       },
       status: {
         label: new InsurancePolicyStatusNamePipe().transform(insurancePolicy.status!)
+      },
+      insurancePolicyProductId: {
+        label: new InsurancePolicyProductTypeNamePipe().transform(
+          this.insurancePolicyProductService.getInsurancePolicyProduct(insurancePolicy.insurancePolicyProductId!)?.type!
+        )
       },
       actions: {
         label: 'Dettaglio',

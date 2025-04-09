@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 
 import { finalize, Observable } from 'rxjs';
 
@@ -18,6 +18,8 @@ export class BankAccountService {
   private bankAccountApiService = inject(BankAccountApiService);
   private userBankAccountApiService = inject(UserBankAccountApiService);
   private globalSpinnerService = inject(GlobalSpinnerService);
+
+  currentBankAccountId = signal<string | undefined>(undefined);
 
   public getBankAccounts(): Observable<BankAccountGet[]> {
     return this.bankAccountApiService.bankAccountsGet();

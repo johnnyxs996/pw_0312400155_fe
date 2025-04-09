@@ -11,9 +11,12 @@ export const bankAccountResolver: ResolveFn<BankAccountGet> = (route, state) => 
   const currencyService = inject(CurrencyService);
   const bankAccountService = inject(BankAccountService);
   const bankAccountId = route.paramMap.get('bankAccountId')!;
-  return bankAccountService
-    .getBankAccount(bankAccountId)
-    .pipe(tap((bankAccount) => (currencyService.defaultAccountCurrency = bankAccount.currency)));
+  return bankAccountService.getBankAccount(bankAccountId).pipe(
+    tap((bankAccount) => {
+      bankAccountService.currentBankAccountId.set(bankAccount.id);
+      currencyService.defaultAccountCurrency = bankAccount.currency;
+    })
+  );
 };
 
 export const userBankAccountsResolver: ResolveFn<BankAccountGet[]> = (route, state) => {
