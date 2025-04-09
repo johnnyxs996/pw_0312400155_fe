@@ -1,6 +1,6 @@
 import { Component, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 
 import { SidenavService } from '../shared/services/sidenav.service';
 
@@ -11,7 +11,6 @@ import { SidenavService } from '../shared/services/sidenav.service';
   styleUrl: './management.component.css'
 })
 export class ManagementComponent {
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   protected sidenavService = inject(SidenavService);
 
