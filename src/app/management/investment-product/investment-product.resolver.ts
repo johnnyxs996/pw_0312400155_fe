@@ -6,5 +6,5 @@ import { InvestmentProductService } from './investment-product.service';
 
 export const investmentProductsResolver: ResolveFn<InvestmentProductGet[]> = (route, state) => {
   const investmentProductService = inject(InvestmentProductService);
-  return investmentProductService.getInvestmentProducts();
+  return investmentProductService.getInvestmentProducts(false);
 };

@@ -6,5 +6,5 @@ import { BankGet } from '../../../api';
 
 export const banksResolver: ResolveFn<BankGet[]> = (route, state) => {
   const bankService = inject(BankService);
-  return bankService.getBanks();
+  return bankService.getBanks(false);
 };

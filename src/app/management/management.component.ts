@@ -1,11 +1,8 @@
 import { Component, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
-
-import { filter, map, startWith } from 'rxjs';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 
 import { SidenavService } from '../shared/services/sidenav.service';
-import { getAllPathParams } from '../shared/utils/route';
 
 @Component({
   selector: 'app-management',
@@ -18,16 +15,10 @@ export class ManagementComponent {
   private router = inject(Router);
   protected sidenavService = inject(SidenavService);
 
-  protected pathParamsFromRoot = toSignal(
-    this.router.events.pipe(
-      filter((e) => e instanceof NavigationEnd),
-      map(() => getAllPathParams(this.route)),
-      startWith(getAllPathParams(this.route))
-    )
-  );
+  protected navigationEvent = toSignal(this.router.events);
 
   protected changeNavlistOnRouteChange = effect(() => {
-    const trigger = this.pathParamsFromRoot();
+    const trigger = this.navigationEvent();
     const navlistRoutes: { routePath: string; routeLabel: string; iconName?: string }[] = [
       {
         routePath: `/management/bank`,

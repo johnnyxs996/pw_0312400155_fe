@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 
 import { InsurancePolicyProductApiService, InsurancePolicyProductGet } from '../../../api';
 
@@ -10,7 +10,32 @@ import { InsurancePolicyProductApiService, InsurancePolicyProductGet } from '../
 export class InsurancePolicyProductService {
   protected insurancePolicyProductApiService = inject(InsurancePolicyProductApiService);
 
-  getInsurancePolicyProducts(): Observable<InsurancePolicyProductGet[]> {
-    return this.insurancePolicyProductApiService.insurancePolicyProductsGet();
+  private insurancePolicyProductsCache = new Map<string, InsurancePolicyProductGet>();
+
+  getInsurancePolicyProducts(forceCache: boolean = true): Observable<InsurancePolicyProductGet[]> {
+    if (forceCache && this.insurancePolicyProductsCache.size) {
+      return of(Array.from(this.insurancePolicyProductsCache.values()));
+    }
+    return this.insurancePolicyProductApiService
+      .insurancePolicyProductsGet()
+      .pipe(
+        tap((insurancePolicyProducts: InsurancePolicyProductGet[]) =>
+          this.addInsurancePolicyProductsToCache(insurancePolicyProducts)
+        )
+      );
+  }
+
+  getInsurancePolicyProduct(insurancePolicyProductId: string): InsurancePolicyProductGet | undefined {
+    return this.getInsurancePolicyProductFromCache(insurancePolicyProductId);
+  }
+
+  private addInsurancePolicyProductsToCache(insurancePolicyProducts: InsurancePolicyProductGet[]): void {
+    insurancePolicyProducts.forEach((insurancePolicyProduct) => {
+      this.insurancePolicyProductsCache.set(insurancePolicyProduct.id, insurancePolicyProduct);
+    });
+  }
+
+  private getInsurancePolicyProductFromCache(insurancePolicyProductId: string): InsurancePolicyProductGet | undefined {
+    return this.insurancePolicyProductsCache.get(insurancePolicyProductId);
   }
 }

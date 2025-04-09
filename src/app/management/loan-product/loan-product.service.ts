@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 
 import { LoanProductApiService, LoanProductGet } from '../../../api';
 
@@ -10,7 +10,28 @@ import { LoanProductApiService, LoanProductGet } from '../../../api';
 export class LoanProductService {
   protected loanProductApiService = inject(LoanProductApiService);
 
-  getLoanProducts(): Observable<LoanProductGet[]> {
-    return this.loanProductApiService.loanProductsGet();
+  private loanProductsCache = new Map<string, LoanProductGet>();
+
+  getLoanProducts(forceCache: boolean = true): Observable<LoanProductGet[]> {
+    if (forceCache && this.loanProductsCache.size) {
+      return of(Array.from(this.loanProductsCache.values()));
+    }
+    return this.loanProductApiService
+      .loanProductsGet()
+      .pipe(tap((loanProducts: LoanProductGet[]) => this.addLoanProductsToCache(loanProducts)));
+  }
+
+  getLoanProduct(loanProductId: string): LoanProductGet | undefined {
+    return this.getLoanProductFromCache(loanProductId);
+  }
+
+  private addLoanProductsToCache(loanProducts: LoanProductGet[]): void {
+    loanProducts.forEach((loanProduct) => {
+      this.loanProductsCache.set(loanProduct.id, loanProduct);
+    });
+  }
+
+  private getLoanProductFromCache(loanProductId: string): LoanProductGet | undefined {
+    return this.loanProductsCache.get(loanProductId);
   }
 }

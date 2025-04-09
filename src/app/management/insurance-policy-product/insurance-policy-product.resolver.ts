@@ -6,5 +6,5 @@ import { InsurancePolicyProductService } from './insurance-policy-product.servic
 
 export const insurancePolicyProductsResolver: ResolveFn<InsurancePolicyProductGet[]> = (route, state) => {
   const insurancePolicyProductService = inject(InsurancePolicyProductService);
-  return insurancePolicyProductService.getInsurancePolicyProducts();
+  return insurancePolicyProductService.getInsurancePolicyProducts(false);
 };
