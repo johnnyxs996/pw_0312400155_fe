@@ -1,0 +1,28 @@
+<app-page-header title="Nuova tipologia di prestito" [showBackButton]="true"></app-page-header>
+
+<div class="flex flex-col flex-1 justify-between items-center h-full max-w-[500px]">
+  <form [formGroup]="loanProductForm">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tasso di interesse (%)</mat-label>
+      <input matInput formControlName="rate" type="number" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tipologia</mat-label>
+      <mat-select formControlName="type" required>
+        @for (loanProduct of loanProductTypes; track loanProduct) {
+          <mat-option [value]="loanProduct">{{ loanProduct | loanProductTypeName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+  <button mat-flat-button color="primary" class="w-full" (click)="createLoanProduct()">
+    Crea
+  </button>
+</div>

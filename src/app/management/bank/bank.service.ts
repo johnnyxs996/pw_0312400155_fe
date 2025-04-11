@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable, of, tap } from 'rxjs';
 
-import { BankApiService, BankGet } from '../../../api';
+import { BankApiService, BankGet, BanksPost } from '../../../api';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,10 @@ export class BankService {
 
   getBank(bankId: string): BankGet | undefined {
     return this.getBankFromCache(bankId);
+  }
+
+  createBank(banksPost: BanksPost) {
+    return this.bankApiService.banksPost(banksPost);
   }
 
   private addBanksToCache(banks: BankGet[]): void {

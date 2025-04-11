@@ -1,0 +1,23 @@
+<app-page-header title="Nuova filiale" [showBackButton]="true"></app-page-header>
+
+<div class="flex flex-col flex-1 justify-between items-center h-full max-w-[500px]">
+  <form [formGroup]="bankForm">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Indirizzo</mat-label>
+      <input matInput formControlName="address">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Numero di telefono</mat-label>
+      <input matInput formControlName="phone">
+    </mat-form-field>
+  </form>
+  <button mat-flat-button color="primary" class="w-full" (click)="createBank()">
+    Crea
+  </button>
+</div>

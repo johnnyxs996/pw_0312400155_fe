@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable, of, tap } from 'rxjs';
 
-import { LoanProductApiService, LoanProductGet } from '../../../api';
+import { LoanProductApiService, LoanProductGet, LoanProductsPost } from '../../../api';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,10 @@ export class LoanProductService {
 
   getLoanProduct(loanProductId: string): LoanProductGet | undefined {
     return this.getLoanProductFromCache(loanProductId);
+  }
+
+  createLoanProduct(loanProductPost: LoanProductsPost) {
+    return this.loanProductApiService.loanProductsPost(loanProductPost);
   }
 
   private addLoanProductsToCache(loanProducts: LoanProductGet[]): void {

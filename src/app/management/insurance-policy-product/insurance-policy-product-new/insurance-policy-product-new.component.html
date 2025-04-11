@@ -1,0 +1,32 @@
+<app-page-header title="Nuovo prodotto assicurativo" [showBackButton]="true"></app-page-header>
+
+<div class="flex flex-col flex-1 justify-between items-center h-full max-w-[500px]">
+  <form [formGroup]="insurancePolicyProductForm">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Premio annuale</mat-label>
+      <input matInput formControlName="annualPremium" type="number" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Massimale</mat-label>
+      <input matInput formControlName="coverageCap" type="number" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tipologia</mat-label>
+      <mat-select formControlName="type" required>
+        @for (insurancePolicyProductType of insurancePolicyProductTypes; track insurancePolicyProductType) {
+          <mat-option [value]="insurancePolicyProductType">{{ insurancePolicyProductType | insurancePolicyProductTypeName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+  <button mat-flat-button color="primary" class="w-full" (click)="createInsurancePolicyProduct()">
+    Crea
+  </button>
+</div>

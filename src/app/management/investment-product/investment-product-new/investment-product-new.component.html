@@ -1,0 +1,28 @@
+<app-page-header title="Nuovo prodotto di investimento" [showBackButton]="true"></app-page-header>
+
+<div class="flex flex-col flex-1 justify-between items-center h-full max-w-[500px]">
+  <form [formGroup]="investmentProductForm">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tasso di interesse (%)</mat-label>
+      <input matInput formControlName="rate" type="number" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tipologia</mat-label>
+      <mat-select formControlName="type" required>
+        @for (investmentProduct of investmentProductTypes; track investmentProduct) {
+          <mat-option [value]="investmentProduct">{{ investmentProduct | investmentProductTypeName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+  <button mat-flat-button color="primary" class="w-full" (click)="createInvestmentProduct()">
+    Crea
+  </button>
+</div>

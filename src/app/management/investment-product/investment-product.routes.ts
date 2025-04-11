@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { investmentProductsResolver } from './investment-product.resolver';
+import { investmentProductResolver, investmentProductsResolver } from './investment-product.resolver';
 
 export const routes: Routes = [
   {
@@ -16,6 +16,21 @@ export const routes: Routes = [
       ),
     resolve: {
       investmentProducts: investmentProductsResolver
+    }
+  },
+  {
+    path: 'new',
+    loadComponent: () =>
+      import('./investment-product-new/investment-product-new.component').then((c) => c.InvestmentProductNewComponent)
+  },
+  {
+    path: ':investmentProductId',
+    loadComponent: () =>
+      import('./investment-product-detail/investment-product-detail.component').then(
+        (c) => c.InvestmentProductDetailComponent
+      ),
+    resolve: {
+      investmentProduct: investmentProductResolver
     }
   }
 ];

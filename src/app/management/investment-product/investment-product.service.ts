@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable, of, tap } from 'rxjs';
 
-import { InvestmentProductApiService, InvestmentProductGet } from '../../../api';
+import { InvestmentProductApiService, InvestmentProductGet, InvestmentProductsPost } from '../../../api';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,10 @@ export class InvestmentProductService {
 
   getInvestmentProduct(investmentProductId: string): InvestmentProductGet | undefined {
     return this.getInvestmentProductFromCache(investmentProductId);
+  }
+
+  createInvestmentProduct(investmentProductPost: InvestmentProductsPost) {
+    return this.investmentProductApiService.investmentProductsPost(investmentProductPost);
   }
 
   private addInvestmentProductsToCache(investmentProducts: InvestmentProductGet[]): void {

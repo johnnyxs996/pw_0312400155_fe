@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable, of, tap } from 'rxjs';
 
-import { InsurancePolicyProductApiService, InsurancePolicyProductGet } from '../../../api';
+import { InsurancePolicyProductApiService, InsurancePolicyProductGet, InsurancePolicyProductsPost } from '../../../api';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +27,10 @@ export class InsurancePolicyProductService {
 
   getInsurancePolicyProduct(insurancePolicyProductId: string): InsurancePolicyProductGet | undefined {
     return this.getInsurancePolicyProductFromCache(insurancePolicyProductId);
+  }
+
+  createInsurancePolicyProduct(insurancePolicyProductsPost: InsurancePolicyProductsPost) {
+    return this.insurancePolicyProductApiService.insurancePolicyProductsPost(insurancePolicyProductsPost);
   }
 
   private addInsurancePolicyProductsToCache(insurancePolicyProducts: InsurancePolicyProductGet[]): void {

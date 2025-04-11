@@ -4,6 +4,12 @@ import { ResolveFn } from '@angular/router';
 import { InsurancePolicyProductGet } from '../../../api';
 import { InsurancePolicyProductService } from './insurance-policy-product.service';
 
+export const insurancePolicyProductResolver: ResolveFn<InsurancePolicyProductGet | undefined> = (route, state) => {
+  const insurancePolicyProductService = inject(InsurancePolicyProductService);
+  const insurancePolicyProductId = route.params['insurancePolicyProductId'];
+  return insurancePolicyProductService.getInsurancePolicyProduct(insurancePolicyProductId);
+};
+
 export const insurancePolicyProductsResolver: ResolveFn<InsurancePolicyProductGet[]> = (route, state) => {
   const insurancePolicyProductService = inject(InsurancePolicyProductService);
   return insurancePolicyProductService.getInsurancePolicyProducts(false);

@@ -1,0 +1,7 @@
+<app-page-header title="Dettaglio filiale" [showBackButton]="true"></app-page-header>
+
+<div class="flex flex-col w-full gap-8 items-center">
+  @if(cardDetail(); as cardDetail) {
+    <app-detail-card [config]="cardDetail"></app-detail-card>
+  }
+</div>

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { insurancePolicyProductsResolver } from './insurance-policy-product.resolver';
+import { insurancePolicyProductResolver, insurancePolicyProductsResolver } from './insurance-policy-product.resolver';
 
 export const routes: Routes = [
   {
@@ -16,6 +16,23 @@ export const routes: Routes = [
       ),
     resolve: {
       insurancePolicyProducts: insurancePolicyProductsResolver
+    }
+  },
+  {
+    path: 'new',
+    loadComponent: () =>
+      import('./insurance-policy-product-new/insurance-policy-product-new.component').then(
+        (c) => c.InsurancePolicyProductNewComponent
+      )
+  },
+  {
+    path: ':insurancePolicyProductId',
+    loadComponent: () =>
+      import('./insurance-policy-product-detail/insurance-policy-product-detail.component').then(
+        (c) => c.InsurancePolicyProductDetailComponent
+      ),
+    resolve: {
+      insurancePolicyProduct: insurancePolicyProductResolver
     }
   }
 ];
