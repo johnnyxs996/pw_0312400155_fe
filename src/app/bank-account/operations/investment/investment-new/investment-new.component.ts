@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { catchError, EMPTY, map, tap } from 'rxjs';
+import { catchError, EMPTY, tap } from 'rxjs';
 
 import { InvestmentService } from '../investment.service';
 import { ErrorModelType } from '../../../../shared/models/error.model';
@@ -52,9 +52,7 @@ export class InvestmentNewComponent {
 
   bankAccountId = this.bankAccountService.currentBankAccountId;
 
-  // TODO: aggiungere prodotti di investimento
   investmentProducts = toSignal(this.investmentProductService.getInvestmentProducts());
-  selectedInvestmentProductId = signal<string>('');
 
   investmentForm = this.fb.group({
     amount: [0, Validators.required],
